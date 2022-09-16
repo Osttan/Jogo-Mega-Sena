@@ -36,39 +36,47 @@ function zeraInput() {
 }
 
 function recebeDezenas(dezenas) {
-  console.log(dezenas);
-  button.innerHTML = "Confirmar dezena";
+  button.innerHTML = "Confirmar Dezena";
   let dezenasEscolhidas = [],
     achou;
+
   document.querySelector(".btn").addEventListener("click", () => {
-    achou = false;
-    dezenaInserida = parseInt(input.value);
-    if (dezenaInserida < 1 || dezenaInserida > 60) {
-      mensagem.innerText = "  Dezena não permitida!";
-      setTimeout(() => {
-        mensagem.innerText = "";
-      }, 2000);
-      zeraInput();
-    } else if (dezenasEscolhidas.length === 0) {
-      dezenasEscolhidas.push(dezenaInserida);
-      zeraInput();
-    } else {
-      dezenasEscolhidas.forEach(dezena => {
-        if (dezenaInserida == dezena) {
-          console.log("Já tem");
-          achou = true;
-          zeraInput();
-        }
-      });
-      if (!achou) {
+    if (dezenasEscolhidas.length < dezenas) {
+      achou = false;
+      dezenaInserida = parseInt(input.value);
+      if (dezenaInserida < 1 || dezenaInserida > 60) {
+        mensagem.innerText = "  Dezena não permitida!";
+        setTimeout(() => {
+          mensagem.innerText = "";
+        }, 1500);
+        zeraInput();
+      } else if (dezenasEscolhidas.length === 0) {
         dezenasEscolhidas.push(dezenaInserida);
         zeraInput();
+      } else {
+        dezenasEscolhidas.forEach(dezena => {
+          if (dezenaInserida == dezena) {
+            console.log("Já tem");
+            achou = true;
+            zeraInput();
+          }
+        });
+        if (!achou) {
+          dezenasEscolhidas.push(dezenaInserida);
+          zeraInput();
+        }
       }
+      console.log(dezenasEscolhidas);
+    } else {
+      button.innerHTML = "Confira o resultado!";
+      completaDezenas(dezenasEscolhidas);
     }
-    console.log(dezenasEscolhidas);
   });
 }
 
+function completaDezenas(escolhidas) {
+  console.log(`As dezenas escolhidas foram ${escolhidas}`);
+}
 // function sorteia() {
 //   let resultado = [];
 //   for (let i = 0; i <= 5; i++) {
