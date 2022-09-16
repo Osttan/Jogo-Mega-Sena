@@ -1,7 +1,6 @@
 let input = document.querySelector("input");
 const mensagem = document.querySelector("span");
 let button = document.querySelector(".btn");
-// let buttonClickado = document.querySelector(".recebida");
 
 button.addEventListener("click", recebeQuantDezenas);
 
@@ -24,9 +23,8 @@ function recebeQuantDezenas() {
     );
     zeraInput();
   } else {
-    button.innerHTML = "Clique para ver se ganhou!!!";
     input.value = "";
-    // return quantidadeDezenasEscolhidas;
+    button.removeEventListener("click", recebeQuantDezenas);
     recebeDezenas(quantidadeDezenasEscolhidas);
   }
 }
@@ -37,17 +35,38 @@ function zeraInput() {
   input.focus();
 }
 
-// button.addEventListener("click", recebeDezenas);
-
 function recebeDezenas(dezenas) {
-  dezenasEscolhidas = [];
-  dezenaAtual = 0;
-  for (i = 0; i <= dezenas; i++) {
-    input.addEventListener("change", () => {
-      dezenasEscolhidas[i] = input.value;
-      mensagem.innerText = `  Insira a ${i}ª dezena`;
-    });
-  }
+  console.log(dezenas);
+  button.innerHTML = "Confirmar dezena";
+  let dezenasEscolhidas = [],
+    achou;
+  document.querySelector(".btn").addEventListener("click", () => {
+    achou = false;
+    dezenaInserida = parseInt(input.value);
+    if (dezenaInserida < 1 || dezenaInserida > 60) {
+      mensagem.innerText = "  Dezena não permitida!";
+      setTimeout(() => {
+        mensagem.innerText = "";
+      }, 2000);
+      zeraInput();
+    } else if (dezenasEscolhidas.length === 0) {
+      dezenasEscolhidas.push(dezenaInserida);
+      zeraInput();
+    } else {
+      dezenasEscolhidas.forEach(dezena => {
+        if (dezenaInserida == dezena) {
+          console.log("Já tem");
+          achou = true;
+          zeraInput();
+        }
+      });
+      if (!achou) {
+        dezenasEscolhidas.push(dezenaInserida);
+        zeraInput();
+      }
+    }
+    console.log(dezenasEscolhidas);
+  });
 }
 
 // function sorteia() {
