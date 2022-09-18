@@ -1,6 +1,8 @@
 let input = document.querySelector("input");
 const mensagem = document.querySelector("span");
-let button = document.querySelector(".btn");
+let button = document.querySelector(".btn"),
+  resultado,
+  aposta;
 
 button.addEventListener("click", recebeQuantDezenas);
 
@@ -23,9 +25,9 @@ function recebeQuantDezenas() {
     );
     zeraInput();
   } else {
-    input.value = "";
-    button.removeEventListener("click", recebeQuantDezenas);
     recebeDezenas(quantidadeDezenasEscolhidas);
+    button.removeEventListener("click", recebeQuantDezenas);
+    zeraInput();
   }
 }
 
@@ -56,55 +58,70 @@ function recebeDezenas(dezenas) {
       } else {
         dezenasEscolhidas.forEach(dezena => {
           if (dezenaInserida == dezena) {
-            console.log("Já tem");
+            mensagem.innerText = "  Dezena já inserida!";
+            setTimeout(() => {
+              mensagem.innerText = "";
+            }, 1500);
             achou = true;
             zeraInput();
           }
         });
-        if (!achou) {
+        if (!isNaN(dezenaInserida) && !achou) {
           dezenasEscolhidas.push(dezenaInserida);
           zeraInput();
         }
       }
       console.log(dezenasEscolhidas);
-    } else {
-      button.innerHTML = "Confira o resultado!";
-      completaDezenas(dezenasEscolhidas);
+      if (dezenasEscolhidas.length == dezenas) {
+        button.innerHTML = "Confira o resultado!";
+        input.focus();
+      }
     }
   });
 }
 
 function completaDezenas(escolhidas) {
-  console.log(`As dezenas escolhidas foram ${escolhidas}`);
+  let i = 0,
+    aleatorio;
+
+  const faltantes = 15 - escolhidas.length;
+
+  while (i < faltantes) {
+    aleatorio = Math.floor(Math.random() * 60) + 1;
+    if (escolhidas.indexOf(aleatorio) == -1) {
+      escolhidas.push(aleatorio);
+      i++;
+    }
+  }
+  console.log(`Os números escolhidos foram ${escolhidas}`);
+  return escolhidas;
 }
-// function sorteia() {
-//   let resultado = [];
-//   for (let i = 0; i <= 5; i++) {
-//     resultado[i] = Math.floor(Math.random() * 60) + 1;
-//   }
-//   return resultado;
-// }
 
-// resultado = sorteia();
-// console.log(resultado);
+function sorteia() {
+  let resultado = [Math.floor(Math.random() * 60) + 1],
+    i = 0;
+  while (i < 5) {
+    aleatorio = Math.floor(Math.random() * 60) + 1;
+    if (resultado.indexOf(aleatorio) == -1) {
+      resultado.push(aleatorio);
+      i++;
+    }
+  }
+  return resultado;
+}
 
-// let numerosTeste = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-// // let numerosTeste = sorteiaNumeros();
-
-// console.log(numerosTeste);
-
-// function adeusMp(resultado, numerosTeste) {
-//   let numerosCorretos = 0;
-//   numerosTeste.forEach(numero => {
-//     for (let i = 0; i <= resultado.length; i++) {
-//       if (resultado[i] == numero) {
-//         numerosCorretos++;
-//       }
-//     }
-//   });
-//   if (numerosCorretos == 6) {
-//     console.log("Você ganhou, cacete!!!!!!");
-//   } else {
-//     console.log(`Você acertou ${numerosCorretos}!!`);
-//   }
-// }
+function adeusMp(resultado, numerosTeste) {
+  let numerosCorretos = 0;
+  numerosTeste.forEach(numero => {
+    for (let i = 0; i <= resultado.length; i++) {
+      if (resultado[i] == numero) {
+        numerosCorretos++;
+      }
+    }
+  });
+  if (numerosCorretos == 6) {
+    return "Você ganhou, cacete!!!!!!";
+  } else {
+    return `Você acertou ${numerosCorretos}!!`;
+  }
+}
